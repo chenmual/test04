@@ -24,7 +24,7 @@ public class UIAsk : MonoBehaviour, IEventListener
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameMain.getInstance().addListener(this);
     }
 
     // Update is called once per frame
@@ -93,7 +93,8 @@ public class UIAsk : MonoBehaviour, IEventListener
         httpRequest.AddField("results", answers);
         httpRequest.AddField("title", askSample.questionTitle);
         httpRequest.AddField("name", GameMain.getInstance().getUserName());
-        httpRequest.AddField("sessionNum", GameMain.getInstance().getSessionNum().ToString()) ;
+        httpRequest.AddField("sessionNum", GameMain.getInstance().getSessionNum().ToString());
+        httpRequest.AddField("mac", NetUtil.GetMacAddress());
         httpRequest.Send();
     }
 

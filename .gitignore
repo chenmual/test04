@@ -59,3 +59,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 /test04/Library
+/test04/Logs
+/test04/obj
+/test04/Temp
+/test04/Packages
