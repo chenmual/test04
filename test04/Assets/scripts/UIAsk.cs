@@ -21,6 +21,8 @@ public class UIAsk : MonoBehaviour, IEventListener
     private int right = 0;
     private bool isRight = false;
 
+    public float startTime = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +52,7 @@ public class UIAsk : MonoBehaviour, IEventListener
             string json = response.DataAsText;
             askSample = JsonMapper.ToObject<AskQuestion>(json);
             refreshTitle();
+            startTime = GameMain.getInstance().getCurrentGameTime();
         }
     }
 
@@ -81,6 +84,15 @@ public class UIAsk : MonoBehaviour, IEventListener
 
     public void sendRecord() {
         HTTPRequest httpRequest = new HTTPRequest(new System.Uri("http://106.12.55.205:10224/calc/setAnswer"), HTTPMethods.Post, onRecord);
+
+        float now = GameMain.getInstance().getCurrentGameTime();
+        // 计算当前时间
+        if (startTime == 0) {
+            startTime = now;
+        }
+        int second = Mathf.FloorToInt(now - startTime);
+        Debug.Log("usetime = " + second);
+
         httpRequest.AddField("qId", askSample.qId.ToString());
         httpRequest.AddField("isRight", isRight? "1" : "0");
         string answers = "";
@@ -95,6 +107,7 @@ public class UIAsk : MonoBehaviour, IEventListener
         httpRequest.AddField("name", GameMain.getInstance().getUserName());
         httpRequest.AddField("sessionNum", GameMain.getInstance().getSessionNum().ToString());
         httpRequest.AddField("mac", NetUtil.GetMacAddress());
+        httpRequest.AddField("sec", second.ToString()) ;
         httpRequest.Send();
     }
 
@@ -137,12 +150,17 @@ public class UIAsk : MonoBehaviour, IEventListener
     public void onEvent(int eventCode, params object[] objs) {
         switch (eventCode) {
             case EventCode.EVENT_ON_PAUSE:
-                GameObject go = (GameObject)Resources.Load("prefab/UISelect");
-                go = Object.Instantiate(go);
-                GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
-                go.transform.parent = main.uiparent;
-                go.transform.localPosition = new Vector3(0, 0, 0);
-                Object.Destroy(this.gameObject);
+                //Debug.Log(objs[0]);
+                //if (objs[0].Equals(true)) {
+                //    GameMain.getInstance().QuitGame();
+                //}
+
+                //GameObject go = (GameObject)Resources.Load("prefab/UISelect");
+                //go = Object.Instantiate(go);
+                //GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
+                //go.transform.parent = main.uiparent;
+                //go.transform.localPosition = new Vector3(0, 0, 0);
+                //Object.Destroy(this.gameObject);
                 break;
         }
     }

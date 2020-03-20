@@ -13,12 +13,14 @@ public class GameMain : MonoBehaviour {
 	private string userName;
 	private int sessionNum = 0;
 
+	float timeSpend = 0.0f;
+
 	private List<IEventListener> eventManager = new List<IEventListener>();
 
 	// Use this for initialization
 	void Start () {
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
-		//Application.runInBackground = true;
+		Application.runInBackground = true;
 		GameObject go = (GameObject)Resources.Load("prefab/UIStart");
 		go = Object.Instantiate(go);
 
@@ -35,6 +37,7 @@ public class GameMain : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		timeSpend += Time.deltaTime;
 	}
 
 	public static GameMain getInstance(){
@@ -68,12 +71,23 @@ public class GameMain : MonoBehaviour {
 
 	public void removeListener(IEventListener listener) {
 		this.eventManager.Remove(listener);
-
 	}
 	public void OnApplicationPause(bool pause) {
 		Debug.Log("onpause " + pause);
 		for (int i = eventManager.Count - 1; i > -1; i--) {
-			eventManager[i].onEvent(EventCode.EVENT_ON_PAUSE, null);
+			eventManager[i].onEvent(EventCode.EVENT_ON_PAUSE, pause);
 		}
+	}
+
+	public float getCurrentGameTime() {
+		return timeSpend;
+	}
+
+	public void QuitGame() {
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
 	}
 }

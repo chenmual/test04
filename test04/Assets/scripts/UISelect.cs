@@ -35,8 +35,7 @@ public class UISelect : MonoBehaviour
         GameObject go = (GameObject)Resources.Load("prefab/UICalc");
         go = Object.Instantiate(go);
 
-        GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
-        go.transform.parent = main.uiparent;
+        go.transform.parent = GameMain.getInstance().uiparent;
         go.transform.localPosition = new Vector3(0, 0, 0);
 
         Object.Destroy(this.gameObject);
@@ -60,8 +59,7 @@ public class UISelect : MonoBehaviour
         GameObject go = (GameObject)Resources.Load("prefab/UIAsk");
         go = Object.Instantiate(go);
 
-        GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
-        go.transform.parent = main.uiparent;
+        go.transform.parent = GameMain.getInstance().uiparent;
         go.transform.localPosition = new Vector3(0, 0, 0);
 
         Object.Destroy(this.gameObject);
