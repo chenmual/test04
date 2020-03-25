@@ -8,4 +8,5 @@ public class AskQuestion
 	public string questionTitle;
 	public string[] result;
 	public string[] answerTitles;
+	public string timeStr;
 }

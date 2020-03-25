@@ -107,7 +107,9 @@ public class UIAsk : MonoBehaviour, IEventListener
         httpRequest.AddField("name", GameMain.getInstance().getUserName());
         httpRequest.AddField("sessionNum", GameMain.getInstance().getSessionNum().ToString());
         httpRequest.AddField("mac", NetUtil.GetMacAddress());
-        httpRequest.AddField("sec", second.ToString()) ;
+        httpRequest.AddField("sec", second.ToString());
+        httpRequest.AddField("createTime", askSample.timeStr);
+
         httpRequest.Send();
     }
 
