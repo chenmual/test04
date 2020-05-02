@@ -152,7 +152,7 @@ public class UIAsk : MonoBehaviour, IEventListener
     public void onEvent(int eventCode, params object[] objs) {
         switch (eventCode) {
             case EventCode.EVENT_ON_PAUSE:
-                //Debug.Log(objs[0]);
+                Debug.Log(objs[0]);
                 //if (objs[0].Equals(true)) {
                 //    GameMain.getInstance().QuitGame();
                 //}
@@ -163,6 +163,16 @@ public class UIAsk : MonoBehaviour, IEventListener
                 //go.transform.parent = main.uiparent;
                 //go.transform.localPosition = new Vector3(0, 0, 0);
                 //Object.Destroy(this.gameObject);
+                break;
+            case EventCode.EVENT_ON_FOCUS:
+                Debug.Log("on ask focus" + objs[0]);
+
+                GameObject go = (GameObject)Resources.Load("prefab/UISelect");
+                go = Object.Instantiate(go);
+                GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
+                go.transform.parent = main.uiparent;
+                go.transform.localPosition = new Vector3(0, 0, 0);
+                Object.Destroy(this.gameObject);
                 break;
         }
     }

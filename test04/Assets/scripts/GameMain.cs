@@ -17,6 +17,8 @@ public class GameMain : MonoBehaviour {
 
 	private List<IEventListener> eventManager = new List<IEventListener>();
 
+	public AudioSource bgmSource;
+
 	// Use this for initialization
 	void Start () {
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -79,8 +81,26 @@ public class GameMain : MonoBehaviour {
 		}
 	}
 
+	public void OnApplicationFocus(bool focus) {
+		Debug.Log("onfocus " + focus);
+		for (int i = eventManager.Count - 1; i > -1; i--) {
+			eventManager[i].onEvent(EventCode.EVENT_ON_FOCUS, focus);
+		}
+	}
+
 	public float getCurrentGameTime() {
 		return timeSpend;
+	}
+
+	public void playBgm(string fileName) {
+		AudioClip clip = Resources.Load<AudioClip>("bgm/" + fileName);
+
+		AudioSource bgmSource = GameMain.getInstance().bgmSource;
+		if (bgmSource.isPlaying) {
+			bgmSource.Stop();
+		}
+		bgmSource.clip = clip;
+		bgmSource.Play();
 	}
 
 	public void QuitGame() {
