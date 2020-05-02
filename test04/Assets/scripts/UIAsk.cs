@@ -23,6 +23,9 @@ public class UIAsk : MonoBehaviour, IEventListener
 
     public float startTime = 0;
 
+    private float lastLostTime = 0f;
+    private float lastEditTime = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -149,6 +152,13 @@ public class UIAsk : MonoBehaviour, IEventListener
         txtTitle.text = askSample.questionTitle;
     }
 
+    public void onEdit(string inputStr) {
+        lastEditTime = Time.realtimeSinceStartup;
+    }
+    public void onEndEdit(string inputStr) {
+        lastEditTime = Time.realtimeSinceStartup;
+    }
+
     public void onEvent(int eventCode, params object[] objs) {
         switch (eventCode) {
             case EventCode.EVENT_ON_PAUSE:
@@ -165,14 +175,33 @@ public class UIAsk : MonoBehaviour, IEventListener
                 //Object.Destroy(this.gameObject);
                 break;
             case EventCode.EVENT_ON_FOCUS:
-                //Debug.Log("on ask focus" + objs[0]);
                 if ((bool)objs[0] == true) {
-                    GameObject go = (GameObject)Resources.Load("prefab/UISelect");
-                    go = Object.Instantiate(go);
-                    GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
-                    go.transform.parent = main.uiparent;
-                    go.transform.localPosition = new Vector3(0, 0, 0);
-                    Object.Destroy(this.gameObject);
+                    if (lastLostTime != 0) {
+                        if (lastEditTime > 0) {
+                            float duringTime = Time.realtimeSinceStartup - lastEditTime;
+                            if (duringTime > 120f) {
+                                GameObject go = (GameObject)Resources.Load("prefab/UISelect");
+                                go = Object.Instantiate(go);
+                                GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
+                                go.transform.parent = main.uiparent;
+                                go.transform.localPosition = new Vector3(0, 0, 0);
+                                Object.Destroy(this.gameObject);
+                            }
+                        } else {
+                            float duringTime = Time.realtimeSinceStartup - lastLostTime;
+                            if (duringTime > 30f) {
+                                GameObject go = (GameObject)Resources.Load("prefab/UISelect");
+                                go = Object.Instantiate(go);
+                                GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
+                                go.transform.parent = main.uiparent;
+                                go.transform.localPosition = new Vector3(0, 0, 0);
+                                Object.Destroy(this.gameObject);
+                            }
+                        }
+                        lastEditTime = 0f;
+                    }
+                } else {
+                    lastLostTime = Time.realtimeSinceStartup;
                 }
                 break;
         }

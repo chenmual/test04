@@ -75,14 +75,14 @@ public class GameMain : MonoBehaviour {
 		this.eventManager.Remove(listener);
 	}
 	public void OnApplicationPause(bool pause) {
-		Debug.Log("onpause " + pause);
+		//Debug.Log("onpause " + pause);
 		for (int i = eventManager.Count - 1; i > -1; i--) {
 			eventManager[i].onEvent(EventCode.EVENT_ON_PAUSE, pause);
 		}
 	}
 
 	public void OnApplicationFocus(bool focus) {
-		Debug.Log("onfocus " + focus);
+		//Debug.Log("onfocus " + focus);
 		for (int i = eventManager.Count - 1; i > -1; i--) {
 			eventManager[i].onEvent(EventCode.EVENT_ON_FOCUS, focus);
 		}
