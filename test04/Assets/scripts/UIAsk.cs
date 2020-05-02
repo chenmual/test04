@@ -189,7 +189,7 @@ public class UIAsk : MonoBehaviour, IEventListener
                             }
                         } else {
                             float duringTime = Time.realtimeSinceStartup - lastLostTime;
-                            if (duringTime > 30f) {
+                            if (duringTime > 10f) {
                                 GameObject go = (GameObject)Resources.Load("prefab/UISelect");
                                 go = Object.Instantiate(go);
                                 GameMain main = GameObject.Find("GameMain").transform.GetComponent<GameMain>();
